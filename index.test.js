@@ -38,6 +38,25 @@ describe("Cheese, Board, and User models", () => {
         expect(firstCheese).toBeInstanceOf(Cheese)
         
     })
+
+    test("add and view mulitple Boards per User", async () => {
+        const firstBoard = await Board.findByPk(1);
+        const secondBoard = await Board.create({
+            type: "cheddars", 
+            description: "different types of cheddar", 
+            rating: 8
+            });
+        // console.log(band1.getMusicians())
+
+        const firstUser = await User.findByPk(1);
+
+        firstUser.addBoards([firstBoard, secondBoard])
+        
+        expect(await firstUser.getBoards()).toBeDefined();
+        expect(await firstUser.getBoards()).toHaveLength(2);
+
+    })
+
 });
 
     
