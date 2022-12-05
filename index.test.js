@@ -46,8 +46,7 @@ describe("Cheese, Board, and User models", () => {
             description: "different types of cheddar", 
             rating: 8
             });
-        // console.log(band1.getMusicians())
-
+    
         const firstUser = await User.findByPk(1);
 
         firstUser.addBoards([firstBoard, secondBoard])
@@ -55,6 +54,28 @@ describe("Cheese, Board, and User models", () => {
         expect(await firstUser.getBoards()).toBeDefined();
         expect(await firstUser.getBoards()).toHaveLength(2);
 
+    })
+
+    test("test Many-to-Many relationship between Cheese and Board models", async () => {
+        const firstBoard = await Board.findByPk(1);
+        const secondBoard = await Board.findByPk(2);
+    
+        const firstCheese = await Cheese.findByPk(1);
+        const secondCheese = await Cheese.create({
+            title: "white cheddar", 
+            description: "white version of cheddar"
+        });
+
+        await firstBoard.addCheeses([firstCheese, secondCheese])
+
+        await firstCheese.addBoard(firstBoard);
+        await firstCheese.addBoard(secondBoard);
+        
+        expect(await firstBoard.getCheeses()).toBeDefined();
+        expect(await firstBoard.getCheeses()).toHaveLength(2);
+
+        expect(await firstCheese.getBoards()).toBeDefined();
+        expect(await firstCheese.getBoards()).toHaveLength(2);
     })
 
 });
