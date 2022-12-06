@@ -73,9 +73,46 @@ describe("Cheese, Board, and User models", () => {
         
         expect(await firstBoard.getCheeses()).toBeDefined();
         expect(await firstBoard.getCheeses()).toHaveLength(2);
+        
 
         expect(await firstCheese.getBoards()).toBeDefined();
         expect(await firstCheese.getBoards()).toHaveLength(2);
+    })
+
+    test("Eager Loading a Board with its Cheese", async () => {
+        const allBoards = await Board.findAll({
+            include: [{
+                model: Cheese, as: "cheeses"
+            }]
+        })
+
+        expect(allBoards[0].cheeses.length).toBe(2);
+        expect(allBoards[1].cheeses.length).toBe(1);
+    
+    })
+
+    test("Eager Loading a Board with its Cheese", async () => {
+        const allCheeses = await Cheese.findAll({
+            include: [{
+                model: Board, as: "boards"
+            }]
+        })
+
+        expect(allCheeses[0].boards.length).toBe(2);
+        expect(allCheeses[1].boards.length).toBe(1);
+    
+    })
+
+    test("Eager Loading a User with its Boards", async () => {
+        const allUsers = await User.findAll({
+            include: [{
+                model: Board, as: "boards"
+            }]
+        })
+
+        expect(allUsers[0].boards.length).toBe(2);
+
+    
     })
 
 });
